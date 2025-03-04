@@ -1,0 +1,192 @@
+@import './_variables.scss';
+
+
+// Common styles and utilities that are shared across multiple components
+.page-container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+// Alert messages
+.alert {
+  padding: 1rem;
+  border-radius: $border-radius;
+  margin-bottom: 1rem;
+  
+  &.alert-success {
+    background-color: rgba($success-color, 0.1);
+    border-left: 4px solid $success-color;
+    color: darken($success-color, 15%);
+  }
+  
+  &.alert-warning {
+    background-color: rgba($warning-color, 0.1);
+    border-left: 4px solid $warning-color;
+    color: darken($warning-color, 15%);
+  }
+  
+  &.alert-danger {
+    background-color: rgba($danger-color, 0.1);
+    border-left: 4px solid $danger-color;
+    color: darken($danger-color, 15%);
+  }
+}
+
+// Buttons
+.btn {
+  display: inline-block;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  border-radius: $border-radius;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  
+  &:focus, &:active {
+    outline: none;
+  }
+  
+  &.btn-primary {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    color: $white-color;
+    
+    &:hover {
+      background-color: darken($primary-color, 7%);
+      border-color: darken($primary-color, 10%);
+    }
+  }
+  
+  &.btn-secondary {
+    background-color: $secondary-color;
+    border-color: $secondary-color;
+    color: $dark-color;
+    
+    &:hover {
+      background-color: darken($secondary-color, 7%);
+      border-color: darken($secondary-color, 10%);
+    }
+  }
+  
+  &.btn-link {
+    background-color: transparent;
+    border-color: transparent;
+    color: $primary-color;
+    padding: 0;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  &.btn-block {
+    display: block;
+    width: 100%;
+  }
+}
+
+// Form controls
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $dark-color;
+  background-color: $white-color;
+  background-clip: padding-box;
+  border: 1px solid $gray-color;
+  border-radius: $border-radius;
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  
+  &:focus {
+    border-color: $primary-color;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+  }
+}
+
+// Card
+.card {
+  background-color: $white-color;
+  border-radius: $border-radius;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  
+  .card-header {
+    padding: 1rem;
+    background-color: $secondary-color;
+    border-bottom: 1px solid darken($secondary-color, 5%);
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .card-footer {
+    padding: 1rem;
+    background-color: $secondary-color;
+    border-top: 1px solid darken($secondary-color, 5%);
+  }
+}
+
+// Spinner
+.spinner {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 0.25rem solid rgba($primary-color, 0.3);
+  border-radius: 50%;
+  border-top-color: $primary-color;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Layout helpers
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}

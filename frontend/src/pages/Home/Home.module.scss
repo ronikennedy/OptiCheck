@@ -1,0 +1,195 @@
+@import './styles/_variables.scss';
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  
+  @media (min-width: 768px) {
+    padding: 3rem;
+  }
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  
+  .logo-container {
+    margin-bottom: 1rem;
+    
+    .logo {
+      width: 120px;
+      height: auto;
+    }
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    color: $primary-color;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .tagline {
+    font-size: 1.2rem;
+    color: $dark-color;
+    opacity: 0.8;
+  }
+}
+
+.auth-section {
+  background-color: $secondary-color;
+  border-radius: $border-radius;
+  overflow: hidden;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  
+  .auth-tabs {
+    display: flex;
+    width: 100%;
+    
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 1rem;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: $dark-color;
+      border-bottom: 2px solid transparent;
+      
+      &:hover {
+        background-color: rgba($primary-color, 0.05);
+      }
+      
+      &.active {
+        color: $primary-color;
+        border-bottom-color: $primary-color;
+        font-weight: 600;
+      }
+    }
+  }
+  
+  .auth-content {
+    padding: 2rem;
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+      
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: $dark-color;
+      }
+      
+      .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+        }
+      }
+    }
+    
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      
+      &.btn-primary {
+        background-color: $primary-color;
+        color: white;
+        
+        &:hover {
+          background-color: darken($primary-color, 5%);
+        }
+      }
+    }
+    
+    .form-footer {
+      margin-top: 1rem;
+      text-align: center;
+      
+      .forgot-password {
+        color: $primary-color;
+        text-decoration: none;
+        font-size: 0.9rem;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.feature-section {
+  padding: 2rem 0;
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: $dark-color;
+    font-size: 1.8rem;
+  }
+  
+  .features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .feature {
+      background-color: $secondary-color;
+      padding: 2rem;
+      border-radius: $border-radius;
+      text-align: center;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+      
+      .feature-icon {
+        font-size: 2.5rem;
+        color: $primary-color;
+        margin-bottom: 1rem;
+      }
+      
+      h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: $dark-color;
+      }
+      
+      p {
+        color: $gray-dark-color;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+    }
+  }
+}

@@ -1,195 +1,144 @@
-@import './styles/_variables.scss';
-
-.home-container {
-  display: flex;
-  flex-direction: column;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  
-  @media (min-width: 768px) {
-    padding: 3rem;
+.home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #1a1a1a;
+    padding: 20px;
   }
-}
-
-.hero-section {
-  text-align: center;
-  margin-bottom: 3rem;
   
-  .logo-container {
-    margin-bottom: 1rem;
+  .app-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
     
     .logo {
-      width: 120px;
+      max-width: 200px;
       height: auto;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: white;
+      font-size: 16px;
+      font-weight: 400;
+      text-align: center;
     }
   }
   
-  h1 {
-    font-size: 2.5rem;
-    color: $primary-color;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-  }
-  
-  .tagline {
-    font-size: 1.2rem;
-    color: $dark-color;
-    opacity: 0.8;
-  }
-}
-
-.auth-section {
-  background-color: $secondary-color;
-  border-radius: $border-radius;
-  overflow: hidden;
-  margin-bottom: 3rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  
-  .auth-tabs {
+  .card-container {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
     width: 100%;
-    
-    .auth-tab {
-      flex: 1;
-      text-align: center;
-      padding: 1rem;
-      background: none;
-      border: none;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      color: $dark-color;
-      border-bottom: 2px solid transparent;
-      
-      &:hover {
-        background-color: rgba($primary-color, 0.05);
-      }
-      
-      &.active {
-        color: $primary-color;
-        border-bottom-color: $primary-color;
-        font-weight: 600;
-      }
-    }
+    max-width: 500px;
+    padding: 20px;
   }
   
-  .auth-content {
-    padding: 2rem;
+  .check-in-card {
+    background-color: #e8f0e8;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
     
-    .form-group {
-      margin-bottom: 1.5rem;
+    .card-badge {
+      display: flex;
+      align-items: center;
       
-      label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-        color: $dark-color;
-      }
-      
-      .form-control {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-        transition: border-color 0.3s ease;
-        
-        &:focus {
-          outline: none;
-          border-color: $primary-color;
-          box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
-        }
-      }
-    }
-    
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      
-      &.btn-primary {
-        background-color: $primary-color;
+      .check-icon {
+        width: 24px;
+        height: 24px;
+        background-color: #3c7b9e;
         color: white;
-        
-        &:hover {
-          background-color: darken($primary-color, 5%);
-        }
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        margin-right: 8px;
+      }
+      
+      .badge-text {
+        font-weight: 500;
+        color: #333;
+        font-size: 16px;
       }
     }
     
-    .form-footer {
-      margin-top: 1rem;
-      text-align: center;
-      
-      .forgot-password {
-        color: $primary-color;
-        text-decoration: none;
-        font-size: 0.9rem;
-        
-        &:hover {
-          text-decoration: underline;
-        }
-      }
+    .info-circle {
+      width: 24px;
+      height: 24px;
+      background-color: rgba(60, 123, 158, 0.15);
+      color: #3c7b9e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+      cursor: pointer;
     }
-  }
-}
-
-.feature-section {
-  padding: 2rem 0;
-  
-  h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: $dark-color;
-    font-size: 1.8rem;
   }
   
-  .features {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+  .card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+  }
+  
+  .check-in-button {
+    background-color: #3c7b9e;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 12px 36px;
+    border: none;
+    border-radius: 32px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 80%;
+    max-width: 200px;
     
-    @media (min-width: 768px) {
-      grid-template-columns: repeat(3, 1fr);
+    &:hover {
+      background-color: #4896bd;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     
-    .feature {
-      background-color: $secondary-color;
-      padding: 2rem;
-      border-radius: $border-radius;
-      text-align: center;
-      transition: all 0.3s ease;
-      
-      &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-      }
-      
-      .feature-icon {
-        font-size: 2.5rem;
-        color: $primary-color;
-        margin-bottom: 1rem;
-      }
-      
-      h3 {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-        color: $dark-color;
-      }
-      
-      p {
-        color: $gray-dark-color;
-        font-size: 0.95rem;
-        line-height: 1.5;
-      }
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
   }
-}
+  
+  /* Fix for elements that need specific display modes */
+  .check-icon, .info-circle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Media queries for responsiveness */
+  @media (max-width: 480px) {
+    .card-container {
+      padding: 10px;
+    }
+    
+    .check-in-button {
+      padding: 10px 24px;
+      font-size: 16px;
+    }
+  }

@@ -2,18 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logoImage from '../../assets/logo.png';
 
-const PatientVerification = () => {
+const CVCheckIn = () => {
   const navigate = useNavigate();
   const [animateIn, setAnimateIn] = useState(false);
-  const [idCaptured, setIdCaptured] = useState(false);
-  const [verificationComplete, setVerificationComplete] = useState(false);
+  const [recognitionStarted, setRecognitionStarted] = useState(false);
+  const [recognitionComplete, setRecognitionComplete] = useState(false);
+  const [recognizedUser, setRecognizedUser] = useState(null);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [scanMessage, setScanMessage] = useState('');
+  const videoRef = useRef(null);
   const [particles, setParticles] = useState([]);
   const [floatingCircles, setFloatingCircles] = useState([]);
   const [glowingOrbs, setGlowingOrbs] = useState([]);
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const [scanProgress, setScanProgress] = useState(0);
-  const [scanMessage, setScanMessage] = useState('');
 
   useEffect(() => {
     // Trigger entrance animations after component mounts
@@ -109,9 +109,6 @@ const PatientVerification = () => {
     }
     setGlowingOrbs(newGlowingOrbs);
     
-    // Start camera access on component mount
-    startCamera();
-    
     // Cleanup function for when component unmounts
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
@@ -121,13 +118,54 @@ const PatientVerification = () => {
     };
   }, []);
 
-  // Access webcam
-  const startCamera = () => {
+  // Start face recognition process
+  const startFaceRecognition = () => {
+    setRecognitionStarted(true);
+    setScanProgress(0);
+    setScanMessage('Initializing camera...');
+    
+    // Mock the recognition process
+    const mockRecognition = () => {
+      // Progress simulation
+      const interval = setInterval(() => {
+        setScanProgress(prevProgress => {
+          const newProgress = prevProgress + 2;
+          
+          // Update scan message based on progress
+          if (newProgress === 20) {
+            setScanMessage('Detecting faces...');
+          } else if (newProgress === 40) {
+            setScanMessage('Analyzing facial features...');
+          } else if (newProgress === 60) {
+            setScanMessage('Matching with database...');
+          } else if (newProgress === 80) {
+            setScanMessage('Verifying identity...');
+          } else if (newProgress >= 100) {
+            clearInterval(interval);
+            setRecognitionComplete(true);
+            // Mock recognized user - in real implementation this would come from your Python backend
+            setRecognizedUser({
+              name: "Roni Kennedy",
+              id: "12345",
+              lastCheckIn: "2025-02-28"
+            });
+            setScanMessage('Recognition complete!');
+            return 100;
+          }
+          
+          return newProgress;
+        });
+      }, 100);
+    };
+    
+    // Access webcam
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
+            // Start the mock recognition after camera is initialized
+            setTimeout(mockRecognition, 1000);
           }
         })
         .catch(err => {
@@ -139,71 +177,22 @@ const PatientVerification = () => {
     }
   };
 
-  // Capture ID from video
-  const captureID = () => {
-    setIdCaptured(false);
+  // Handle user confirmation of identity
+  const handleConfirmIdentity = () => {
+    navigate('/patientverification'); // Navigate to ID verification page
+  };
+  
+  // Handle user denying identity
+  const handleDenyIdentity = () => {
+    setRecognitionStarted(false);
+    setRecognitionComplete(false);
+    setRecognizedUser(null);
     setScanProgress(0);
-    setScanMessage('Scanning ID...');
-    
-    // Mock the ID capture and verification process
-    const interval = setInterval(() => {
-      setScanProgress(prevProgress => {
-        const newProgress = prevProgress + 5;
-        
-        // Update scan message based on progress
-        if (newProgress === 20) {
-          setScanMessage('Detecting ID document...');
-        } else if (newProgress === 40) {
-          setScanMessage('Reading information...');
-        } else if (newProgress === 60) {
-          setScanMessage('Verifying ID details...');
-        } else if (newProgress === 80) {
-          setScanMessage('Matching with facial data...');
-        } else if (newProgress >= 100) {
-          clearInterval(interval);
-          setScanMessage('Verification complete!');
-          
-          // Take a snapshot from video for demonstration
-          if (videoRef.current && canvasRef.current) {
-            const video = videoRef.current;
-            const canvas = canvasRef.current;
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            // Add a simulated ID card outline overlay
-            ctx.strokeStyle = '#2ecc71';
-            ctx.lineWidth = 4;
-            ctx.strokeRect(canvas.width * 0.15, canvas.height * 0.2, canvas.width * 0.7, canvas.height * 0.6);
-            
-            // Add some text to simulate detected info
-            ctx.fillStyle = '#2ecc71';
-            ctx.font = '16px Comfortaa';
-            ctx.fillText('ID Verified ✓', canvas.width * 0.15, canvas.height * 0.15);
-          }
-          
-          setIdCaptured(true);
-          setTimeout(() => {
-            setVerificationComplete(true);
-          }, 1000);
-          
-          return 100;
-        }
-        
-        return newProgress;
-      });
-    }, 100);
   };
   
-  // Handle proceeding to vitals
-  const handleProceedToVitals = () => {
-    navigate('/vitalsresults');
-  };
-  
-  // Handle going back to face recognition
-  const handleBackToRecognition = () => {
-    navigate('/cvcheckin');
+  // Handle going back to home
+  const handleBackToHome = () => {
+    navigate('/');
   };
 
   // Generate random movement keyframes for each orb
@@ -228,7 +217,7 @@ const PatientVerification = () => {
 
   // Styling
   const styles = {
-    verificationPage: {
+    checkInPage: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -337,14 +326,6 @@ const PatientVerification = () => {
       height: '100%',
       objectFit: 'cover',
       borderRadius: '12px',
-      display: idCaptured ? 'none' : 'block',
-    },
-    canvas: {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      borderRadius: '12px',
-      display: idCaptured ? 'block' : 'none',
     },
     scanOverlay: {
       position: 'absolute',
@@ -360,29 +341,15 @@ const PatientVerification = () => {
       borderRadius: '12px',
       pointerEvents: 'none',
     },
-    idGuide: {
+    scanLine: {
       position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: '70%',
-      height: '60%',
-      border: '2px dashed rgba(111, 226, 204, 0.8)',
-      borderRadius: '8px',
-      pointerEvents: 'none',
-      display: idCaptured ? 'none' : 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    idGuideText: {
-      color: 'white',
-      fontSize: '14px',
-      textAlign: 'center',
-      padding: '8px 12px',
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      borderRadius: '4px',
-      maxWidth: '80%',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '4px',
+      background: 'linear-gradient(90deg, transparent, rgba(111, 226, 204, 0.8), transparent)',
+      animation: 'scanAnimation 1.5s linear infinite',
+      boxShadow: '0 0 8px rgba(111, 226, 204, 0.6)',
     },
     progressContainer: {
       width: '100%',
@@ -390,7 +357,6 @@ const PatientVerification = () => {
       backgroundColor: 'rgba(0, 0, 0, 0.1)',
       borderRadius: '2px',
       marginBottom: '15px',
-      display: scanProgress > 0 && !idCaptured ? 'block' : 'none',
     },
     progressBar: {
       height: '100%',
@@ -404,22 +370,44 @@ const PatientVerification = () => {
       fontWeight: '500',
       textAlign: 'center',
       textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)',
-      display: scanProgress > 0 && !idCaptured ? 'block' : 'none',
     },
-    verificationMessage: {
+    recognitionMessage: {
       fontSize: '16px',
       textAlign: 'center',
       padding: '0 20px',
       marginBottom: '25px',
       color: '#2c3e50',
     },
+    recognizedUserInfo: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      backgroundColor: 'rgba(111, 226, 204, 0.15)',
+      padding: '20px',
+      borderRadius: '12px',
+      marginBottom: '25px',
+      border: '1px solid rgba(111, 226, 204, 0.3)',
+      width: '100%',
+    },
+    userName: {
+      fontSize: '20px',
+      fontWeight: '600',
+      color: '#2c3e50',
+      marginBottom: '10px',
+    },
+    userDetail: {
+      fontSize: '14px',
+      color: '#2c3e50',
+      marginBottom: '5px',
+    },
     buttonContainer: {
       display: 'flex',
       justifyContent: 'center',
+      flexDirection: 'column',
       width: '100%',
       gap: '15px',
     },
-    scanButton: {
+    startButton: {
       backgroundColor: 'rgba(111, 226, 204, 0.85)',
       color: '#2c3e50',
       fontSize: '18px',
@@ -437,12 +425,12 @@ const PatientVerification = () => {
       justifyContent: 'center',
       gap: '8px',
     },
-    proceedButton: {
+    confirmButton: {
       backgroundColor: 'rgba(111, 226, 204, 0.85)',
       color: '#2c3e50',
-      fontSize: '18px',
+      fontSize: '16px',
       fontWeight: '600',
-      padding: '14px 30px',
+      padding: '12px 25px',
       border: 'none',
       borderRadius: '100px',
       cursor: 'pointer',
@@ -487,21 +475,11 @@ const PatientVerification = () => {
     glowingOrb: {
       position: 'absolute',
       pointerEvents: 'none',
-    },
-    successIcon: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '60px',
-      height: '60px',
-      borderRadius: '50%',
-      backgroundColor: 'rgba(46, 204, 113, 0.15)',
-      marginBottom: '15px',
     }
   };
 
   return (
-    <div style={styles.verificationPage}>
+    <div style={styles.checkInPage}>
       {/* Background elements */}
       <div style={styles.backgroundElement}>
         {/* Floating circles */}
@@ -541,9 +519,9 @@ const PatientVerification = () => {
       {/* Header */}
       <div style={styles.headerContainer}>
         <img src={logoImage} alt="OptiCheck" style={styles.logo} />
-        <h1 style={styles.title}>ID Verification</h1>
+        <h1 style={styles.title}>Identity Verification</h1>
         <p style={styles.subtitle}>
-          Please hold your ID card up to the camera for verification
+          We'll use facial recognition to verify your identity and access your health profile.
         </p>
       </div>
       
@@ -551,11 +529,11 @@ const PatientVerification = () => {
       <div style={styles.mainContainer}>
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <div style={styles.cardTitle}>ID Document Scan</div>
+            <div style={styles.cardTitle}>Facial Recognition</div>
             <button 
               style={styles.backButton}
-              onClick={handleBackToRecognition}
-              aria-label="Back to face recognition"
+              onClick={handleBackToHome}
+              aria-label="Back to home"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -564,81 +542,98 @@ const PatientVerification = () => {
           </div>
           
           <div style={styles.cardBody}>
-            <div style={styles.videoContainer}>
-              <video 
-                ref={videoRef}
-                autoPlay
-                muted
-                playsInline
-                style={styles.video}
-              />
-              <canvas 
-                ref={canvasRef}
-                style={styles.canvas}
-              />
-              
-              {!idCaptured && (
-                <div style={styles.idGuide}>
-                  <div style={styles.idGuideText}>
-                    Position ID card within the frame
-                  </div>
-                </div>
-              )}
-              
-              <div style={styles.scanOverlay}>
-                <div style={styles.progressContainer}>
-                  <div style={{
-                    ...styles.progressBar,
-                    width: `${scanProgress}%`,
-                  }}></div>
-                </div>
-                <div style={styles.scanStatus}>{scanMessage}</div>
-              </div>
-            </div>
-            
-            {verificationComplete ? (
+            {!recognitionStarted ? (
               <>
-                <div style={styles.successIcon}>
-                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 6L9 17L4 12" stroke="#2ecc71" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                <div style={{
+                  ...styles.videoContainer,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                }}>
+                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{opacity: 0.6}}>
+                    <path d="M15 8H15.01M9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12Z" stroke="#2c3e50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 12.5C2 11.6716 2.67157 11 3.5 11C4.32843 11 5 11.6716 5 12.5V15C5 18.3137 7.68629 21 11 21H13C16.3137 21 19 18.3137 19 15V12.5C19 11.6716 19.6716 11 20.5 11C21.3284 11 22 11.6716 22 12.5V15C22 19.4183 18.4183 23 14 23H10C5.58172 23 2 19.4183 2 15V12.5Z" fill="#2c3e50"/>
+                    <path d="M12.5 4C12.5 3.17157 11.8284 2.5 11 2.5C10.1716 2.5 9.5 3.17157 9.5 4V11C9.5 11.8284 10.1716 12.5 11 12.5C11.8284 12.5 12.5 11.8284 12.5 11V4Z" fill="#2c3e50"/>
+                    <path d="M14.5 4C14.5 3.17157 15.1716 2.5 16 2.5C16.8284 2.5 17.5 3.17157 17.5 4V8C17.5 8.82843 16.8284 9.5 16 9.5C15.1716 9.5 14.5 8.82843 14.5 8V4Z" fill="#2c3e50"/>
+                    <path d="M7.5 4C7.5 3.17157 6.82843 2.5 6 2.5C5.17157 2.5 4.5 3.17157 4.5 4V8C4.5 8.82843 5.17157 9.5 6 9.5C6.82843 9.5 7.5 8.82843 7.5 8V4Z" fill="#2c3e50"/>
                   </svg>
                 </div>
                 
-                <div style={styles.verificationMessage}>
-                  <span style={{fontWeight: 'bold', color: '#2ecc71'}}>Verification Successful</span>
-                  <br />
-                  Your ID has been verified. You can now proceed to vitals monitoring.
-                </div>
+                <p style={styles.recognitionMessage}>
+                  To begin the identity verification process, please click the button below and position your face within the camera frame.
+                </p>
                 
                 <div style={styles.buttonContainer}>
                   <button 
-                    style={styles.proceedButton}
-                    onClick={handleProceedToVitals}
+                    style={styles.startButton}
+                    onClick={startFaceRecognition}
                   >
-                    Continue to Vitals Monitoring
+                    Start Face Recognition
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
                   </button>
                 </div>
               </>
             ) : (
               <>
-                <div style={styles.verificationMessage}>
-                  {idCaptured ? 
-                    "Processing ID information..." : 
-                    "Hold your ID card steady and ensure all details are visible. Please ensure good lighting for optimal scanning."}
+                <div style={styles.videoContainer}>
+                  <video 
+                    ref={videoRef}
+                    autoPlay
+                    muted
+                    playsInline
+                    style={styles.video}
+                  />
+                  {!recognitionComplete && (
+                    <div style={styles.scanOverlay}>
+                      <div style={styles.scanLine}></div>
+                      <div style={styles.progressContainer}>
+                        <div style={{
+                          ...styles.progressBar,
+                          width: `${scanProgress}%`,
+                        }}></div>
+                      </div>
+                      <div style={styles.scanStatus}>{scanMessage}</div>
+                    </div>
+                  )}
                 </div>
                 
-                {!idCaptured && (
-                  <div style={styles.buttonContainer}>
-                    <button 
-                      style={styles.scanButton}
-                      onClick={captureID}
-                    >
-                      Scan ID Card
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
-                        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" />
-                      </svg>
-                    </button>
+                {recognitionComplete && recognizedUser && (
+                  <>
+                    <div style={styles.recognitionMessage}>
+                      <span style={{fontWeight: 'bold', color: '#2ecc71'}}>✓ Identity Matched</span>
+                      <br />
+                      We've successfully identified you. Please confirm this is correct.
+                    </div>
+                    
+                    <div style={styles.recognizedUserInfo}>
+                      <div style={styles.userName}>{recognizedUser.name}</div>
+                      <div style={styles.userDetail}>ID: {recognizedUser.id}</div>
+                      <div style={styles.userDetail}>Last Check-in: {recognizedUser.lastCheckIn}</div>
+                    </div>
+                    
+                    <div style={styles.buttonContainer}>
+                      <button 
+                        style={styles.confirmButton}
+                        onClick={handleConfirmIdentity}
+                      >
+                        Yes, this is me
+                      </button>
+                      <button 
+                        style={styles.cancelButton}
+                        onClick={handleDenyIdentity}
+                      >
+                        No, try again
+                      </button>
+                    </div>
+                  </>
+                )}
+                
+                {!recognitionComplete && (
+                  <div style={styles.recognitionMessage}>
+                    Please maintain a neutral expression and ensure good lighting during the scan.
                   </div>
                 )}
               </>
@@ -697,6 +692,12 @@ const PatientVerification = () => {
             }
           }
           
+          @keyframes scanAnimation {
+            0% { transform: translateY(0%); }
+            50% { transform: translateY(100%); }
+            100% { transform: translateY(0%); }
+          }
+          
           ${randomMoveKeyframes}
           
           button:focus {
@@ -712,4 +713,4 @@ const PatientVerification = () => {
   );
 };
 
-export default PatientVerification;
+export default CVCheckIn;

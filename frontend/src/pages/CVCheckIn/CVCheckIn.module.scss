@@ -1,0 +1,210 @@
+.cv-checkin-page {
+  min-height: 100vh;
+  background-color: #e8f0e8;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  .logo-small {
+    img {
+      height: 28px;
+      width: auto;
+    }
+  }
+  
+  .title-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .info-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: rgba(60, 123, 158, 0.2);
+    color: #3c7b9e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+.progress-container {
+  padding: 0 1rem;
+  
+  .progress-bar {
+    height: 4px;
+    background-color: #d1e2d1;
+    border-radius: 2px;
+    overflow: hidden;
+    
+    .progress-fill {
+      height: 100%;
+      background-color: #3c7b9e;
+      transition: width 0.3s ease;
+    }
+  }
+}
+
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.start-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.start-button {
+  background-color: #3c7b9e;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 0.8rem 2.5rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  width: 80%;
+  max-width: 280px;
+  
+  &:hover {
+    background-color: #4896bd;
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.camera-container {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.camera-view {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.video-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.canvas-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+}
+
+.instructions {
+  text-align: center;
+  color: #555;
+  font-size: 0.9rem;
+  max-width: 80%;
+  margin-top: 1rem;
+}
+
+.verification-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 400px;
+  text-align: center;
+  
+  .result-message {
+    margin-bottom: 2rem;
+    
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    
+    .user-name {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #3c7b9e;
+      margin-bottom: 1rem;
+    }
+    
+    p {
+      color: #666;
+    }
+    
+    &.error {
+      h2 {
+        color: #e74c3c;
+      }
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .confirm-button, .retry-button {
+    flex: 1;
+    background-color: #3c7b9e;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    
+    &:hover {
+      background-color: #4896bd;
+    }
+  }
+  
+  .reject-button {
+    flex: 1;
+    background-color: #e74c3c;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    
+    &:hover {
+      background-color: #c0392b;
+    }
+  }
+}
